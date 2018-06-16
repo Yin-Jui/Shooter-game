@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>desert.jpg</file>
+        <file>tankk.png</file>
+        <file>Missile.png</file>
+        <file>desert2.jpg</file>
+        <file>tank.png</file>
+        <file>enemy.png</file>
+        <file>bomb2.png</file>
+        <file>nuclear-bomb.png</file>
+        <file>redskull.png</file>
+        <file>redskull2.png</file>
+        <file>redskull3.png</file>
+        <file>bossw.png</file>
+        <file>desert3.png</file>
+        <file>bossw2.png</file>
+    </qresource>
+</RCC>
