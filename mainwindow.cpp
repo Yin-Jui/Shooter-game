@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
     scene->addItem(p);
 
     timer1->start(10);
-    timer2->start(1000);
+    timer2->start(2000);
     gametime->start(1000);
     gamingtime = 0;
     connect(gametime,SIGNAL(timeout()),this,SLOT(increasetime()));
@@ -110,22 +110,22 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Up:
     case Qt::Key_W:
         if(p->y()>0){
-        p->setPos(p->x(), p->y() - 10);}
+        p->setPos(p->x(), p->y() - 13);}
     break;
     case Qt::Key_Down:
     case Qt::Key_S:
         if(p->y()+150<800){
-            p->setPos(p->x(), p->y() + 10);}
+            p->setPos(p->x(), p->y() + 13);}
         break;
     case Qt::Key_Left:
     case Qt::Key_A:
         if(p->x()>0){
-            p->setPos(p->x() - 10, p->y());}
+            p->setPos(p->x() - 13, p->y());}
         break;
     case Qt::Key_Right:
     case Qt::Key_D:
         if(p->x()+50<600){
-            p->setPos(p->x() + 10, p->y());}
+            p->setPos(p->x() + 13, p->y());}
         break;
     case Qt::Key_Space:
         if((ultlim->getlimit())>0){
@@ -163,8 +163,9 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
 void MainWindow::spawn(){
 
     enemy *e = new enemy();
-
+     e->connect(e,SIGNAL(collide()),this,SLOT(healthdecrease()));
     scene->addItem(e);
+
 
     weapon *b;
     b=genw(1);//create bomb
@@ -200,7 +201,7 @@ void MainWindow::increasetime(){
 
 void MainWindow::bossmanage(){
 
- if(gamingtime>5&&bossexist!=true){
+ if(gamingtime>20&&bossexist!=true){
 
    boss=new bossr();
    scene->addItem((boss));

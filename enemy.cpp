@@ -6,6 +6,7 @@
 #include"mainwindow.h"
 #include"bullet.h"
 #include"bomb.h"
+#include"player.h"
 
 enemy::enemy(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent){
 
@@ -21,7 +22,21 @@ enemy::enemy(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent){
 }
 
 void enemy::move(){
+    QList<QGraphicsItem *> colliding_items = collidingItems();
 
+    for (int i = 0, n = colliding_items.size(); i < n; ++i){
+        if (typeid(*(colliding_items[i])) == typeid(player)){
+
+            emit collide();
+            this->scene()->removeItem(this);
+
+
+            delete this;
+
+
+            return;
+        }
+    }
     setPos(x(),y()+5);
 
     if (pos().y() > 800){

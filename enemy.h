@@ -10,6 +10,9 @@ class enemy:public QObject, public QGraphicsPixmapItem{
 public:
    enemy(QGraphicsItem * parent=0);
 
+signals:
+    void collide();
+
 public slots:
 
    virtual void move();
