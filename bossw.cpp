@@ -8,12 +8,22 @@
 boosw::boosw()
 {
   setPixmap(QPixmap(":/images/bossw2.png").scaled(75, 75));
-   QTimer *timer = new QTimer;
+   timer = new QTimer;
    timer->start(250);
    connect(timer,SIGNAL(timeout()),this,SLOT(fly()));
+   connect(timer,SIGNAL(timeout()),this,SLOT(check()));
+
 }
 boosw::~boosw(){}
 
+void boosw::check(){
+
+    if(MainWindow::slow){
+        timer->start(700);
+        connect(timer,SIGNAL(timeout()),this,SLOT(fly()));
+
+    }
+}
 void boosw::fly()
 {
     QList<QGraphicsItem *> colliding_items = collidingItems();

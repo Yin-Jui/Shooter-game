@@ -6,6 +6,7 @@ class boosw : public weapon
  Q_OBJECT
 public:
    boosw();
+   QTimer *timer;
    virtual ~boosw();
 
 signals:
@@ -13,6 +14,7 @@ signals:
 
 public slots:
    virtual void fly();
+    void check();
 
 };
 

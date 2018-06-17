@@ -6,6 +6,7 @@ class bomb : public weapon
  Q_OBJECT
 public:
    bomb();
+QTimer *timer;
    virtual ~bomb();
 
 signals:
@@ -14,5 +15,6 @@ signals:
 public slots:
    virtual void fly();
 
+    void check();
 };
 #endif // BOMB_H

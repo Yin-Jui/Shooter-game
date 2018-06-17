@@ -7,12 +7,20 @@
 bomb::bomb()
 {
   setPixmap(QPixmap(":/images/bomb2.png").scaled(50, 50));
-   QTimer *timer = new QTimer;
-   timer->start(20);
+   timer = new QTimer;
+   timer->start(50);
    connect(timer,SIGNAL(timeout()),this,SLOT(fly()));
+   connect(timer,SIGNAL(timeout()),this,SLOT(check()));
 }
 bomb::~bomb(){}
 
+void bomb::check(){
+    if(MainWindow::slow){
+        timer->start(500);
+        connect(timer,SIGNAL(timeout()),this,SLOT(fly()));
+
+    }
+}
 void bomb::fly()
 {
     QList<QGraphicsItem *> colliding_items = collidingItems();

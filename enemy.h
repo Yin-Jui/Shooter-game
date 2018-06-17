@@ -9,6 +9,7 @@ class enemy:public QObject, public QGraphicsPixmapItem{
     Q_OBJECT
 public:
    enemy(QGraphicsItem * parent=0);
+   QTimer *timer1;
 
 signals:
     void collide();
@@ -16,6 +17,7 @@ signals:
 public slots:
 
    virtual void move();
+    void check();
 
 };
 

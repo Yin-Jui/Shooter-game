@@ -38,7 +38,8 @@ SOURCES += \
     ultlimit.cpp \
     bossr.cpp \
     bossw.cpp \
-    bossh.cpp
+    bossh.cpp \
+    marshroom.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -55,7 +56,8 @@ HEADERS += \
     ultlimit.h \
     bossr.h \
     bossw.h \
-    bossh.h
+    bossh.h \
+    marshroom.h
 
 FORMS += \
         mainwindow.ui

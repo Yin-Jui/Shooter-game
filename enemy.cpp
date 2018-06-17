@@ -10,18 +10,28 @@
 
 enemy::enemy(QGraphicsItem *parent): QObject(), QGraphicsPixmapItem(parent){
 
-    int random_number = rand() % 560;
+    int random_number = rand() % 550;
     setPos(random_number,0);
 
     setPixmap(QPixmap(":/images/enemy.png"));
 
-    QTimer * timer1 = new QTimer(this);
-    QTimer * timer2 = new QTimer(this);
-    connect(timer1,SIGNAL(timeout()),this,SLOT(move()));   
-    timer1->start(50);    
+    timer1 = new QTimer(this);
+    timer1->start(50);
+    connect(timer1,SIGNAL(timeout()),this,SLOT(move()));
+    connect(timer1,SIGNAL(timeout()),this,SLOT(check()));
+
 }
 
+void enemy::check(){
+    if(MainWindow::slow){
+        timer1->start(500);
+        connect(timer1,SIGNAL(timeout()),this,SLOT(move()));
+
+    }
+}
 void enemy::move(){
+
+
     QList<QGraphicsItem *> colliding_items = collidingItems();
 
     for (int i = 0, n = colliding_items.size(); i < n; ++i){

@@ -16,6 +16,8 @@
 #include"bossr.h"
 #include"bossh.h"
 
+
+
 namespace Ui {
 class MainWindow;
 }
@@ -32,10 +34,14 @@ public:
     Health *health;
     bossh *bosshealth;
     ultlimit *ultlim;
+    static bool slow;
     void mainmenu();
     void gameover();
     void gameover2();
     void drawpanel();
+    int second;
+    bool upgrade;
+    QGraphicsTextItem *tim;
 
 
 public slots:
@@ -49,10 +55,13 @@ public slots:
     void bossmanage();
     void bossdecrease();
     void bossdecrease2();
+    void spawn2();
+    void upg();
 private:
     Ui::MainWindow *ui;
     QTimer *timer1;
     QTimer *timer2;
+    QTimer *timer3;
     QTimer *gametime;
     weapon *w;
     player *p;
@@ -61,6 +70,7 @@ private:
     int gamingtime;
     bool bossexist;
     bool game;
+
 
     void drawpanel(int x, int y, int width, int height, QColor color, double opacity);
     void drawGUI();

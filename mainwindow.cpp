@@ -3,6 +3,8 @@
 #include"enemy.h"
 #include"player.h"
 #include"bossr.h"
+#include<cstdlib>
+#include"marshroom.h"
 
 #include <QDebug>
 #include<QDateTime>
@@ -14,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     scene(new QGraphicsScene(0, 0, 600, 805)),
     timer1(new QTimer),
     timer2(new QTimer),
+    timer3(new QTimer),
     gametime(new QTimer),
     p(new player)
 
@@ -23,28 +26,34 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graphicsView->setBackgroundBrush(QBrush(QImage(":/images/desert2.jpg")));
     ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-   bossexist=false;
-
+    bossexist=false;
+    upgrade = false;
     ultlim= new ultlimit();
     scene->addItem(ultlim);
 
-    health = new Health();
 
+    health = new Health();
+    tim = new QGraphicsTextItem();
+    scene->addItem(tim);
     scene->addItem(health);
 
     sc = new Score();
     scene->addItem(sc);
     scene->addItem(p);
-
+    second=1000;
     timer1->start(10);
-    timer2->start(2000);
+    timer3->start(10000);
+    timer2->start(second);
     gametime->start(1000);
     gamingtime = 0;
     connect(gametime,SIGNAL(timeout()),this,SLOT(increasetime()));
     connect(timer2,SIGNAL(timeout()),this,SLOT(spawn()));
+    connect(timer3,SIGNAL(timeout()),this,SLOT(spawn2()));
+
     connect(timer2,SIGNAL(timeout()),this,SLOT(bossmanage()));
 
 }
+bool MainWindow::slow=false;
 
 MainWindow::~MainWindow()
 {
@@ -127,6 +136,17 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
         if(p->x()+50<600){
             p->setPos(p->x() + 13, p->y());}
         break;
+    case Qt::Key_R:
+        switch(slow){
+        case false:
+            slow = true;
+            second=5000;
+            break;
+        case true:
+            slow = false;
+            second = 1000;
+            break;}
+        break;
     case Qt::Key_Space:
         if((ultlim->getlimit())>0){
             weapon *w;
@@ -158,6 +178,30 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
     b->connect(b,SIGNAL(collide()),this,SLOT(scoreincrease()));
     b->connect(b,SIGNAL(collide2()),this,SLOT(scoreincrease()));
     b->connect(b,SIGNAL(collide2()),this,SLOT(bossdecrease()));
+    if(upgrade){
+        weapon *b2;
+        b2=genw(0);//create bullet
+        b2->setPixmap(QPixmap(":/images/Missile.png").scaled(50, 50));
+        b2->setPos(p->x()+13+ p->pixmap().width() / 2 - b->pixmap().width() / 2, p->y() - b2->pixmap().height());
+        b2->connect(timer1, SIGNAL(timeout()), b2, SLOT(fly()));
+        scene->addItem(static_cast<QGraphicsPixmapItem*>(b2));
+
+        b2->connect(b2,SIGNAL(collide()),this,SLOT(scoreincrease()));
+        b2->connect(b2,SIGNAL(collide2()),this,SLOT(scoreincrease()));
+        b2->connect(b2,SIGNAL(collide2()),this,SLOT(bossdecrease()));
+
+        weapon *b3;
+        b3=genw(0);//create bullet
+        b3->setPixmap(QPixmap(":/images/Missile.png").scaled(50, 50));
+        b3->setPos(p->x()-13+ p->pixmap().width() / 2 - b->pixmap().width() / 2 , p->y() - b3->pixmap().height());
+        b3->connect(timer1, SIGNAL(timeout()), b3, SLOT(fly()));
+        scene->addItem(static_cast<QGraphicsPixmapItem*>(b3));
+
+        b3->connect(b3,SIGNAL(collide()),this,SLOT(scoreincrease()));
+        b3->connect(b3,SIGNAL(collide2()),this,SLOT(scoreincrease()));
+        b3->connect(b3,SIGNAL(collide2()),this,SLOT(bossdecrease()));
+
+    }
 }
 
 void MainWindow::spawn(){
@@ -166,13 +210,14 @@ void MainWindow::spawn(){
      e->connect(e,SIGNAL(collide()),this,SLOT(healthdecrease()));
     scene->addItem(e);
 
-
+int random_number = rand() % 2;
+if(random_number==0){
     weapon *b;
     b=genw(1);//create bomb
     b->setPos(e->x()+25,e->y()+25);
     scene->addItem(static_cast<QGraphicsPixmapItem*>(b));
     b->connect(b,SIGNAL(collide2()),this,SLOT(healthdecrease()));
-
+}
 
 }
 void MainWindow::scoreincrease(){
@@ -193,6 +238,10 @@ void MainWindow::ultdecrease(){
 }
 void MainWindow::increasetime(){
     gamingtime++;
+    tim->setPlainText(QString("TIME: ") + QString::number(gamingtime));
+    tim->setDefaultTextColor(Qt::green);
+    tim->setFont(QFont("times",16));
+    tim->setPos(30,10);
     if(health->health<=0){
         gameover();
     }
@@ -201,7 +250,7 @@ void MainWindow::increasetime(){
 
 void MainWindow::bossmanage(){
 
- if(gamingtime>20&&bossexist!=true){
+ if(gamingtime>40&&bossexist!=true){
 
    boss=new bossr();
    scene->addItem((boss));
@@ -240,4 +289,17 @@ void MainWindow::bossdecrease2()
 {
     bosshealth->decrease2();
 }
+
+void MainWindow::spawn2()
+{
+    marshroom *e = new marshroom();
+     e->connect(e,SIGNAL(collide()),this,SLOT(upg()));
+     scene->addItem(e);
+}
+
+void MainWindow::upg()
+{
+    upgrade=true;
+}
+
 
