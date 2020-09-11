@@ -1,4 +1,4 @@
-# c++ course project3(QT creator)
+# Shooter Game
 
 ##  <span style="color:blue">**Game Screen**
 <img src="https://upload.cc/i1/2019/11/30/QhVzc5.png" width=220>
